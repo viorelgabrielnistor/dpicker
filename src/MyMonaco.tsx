@@ -5,18 +5,19 @@ import Editor from "@monaco-editor/react";
 import './myMonaco.css';
 
 export const MyMonaco: FC = (): any => {
-  const editorRef = useRef<any>(null);
+  // const editorRef = useRef<any>(null);
 
-  const [myText, setMyText] = useState(`before ...  [insert: ] ...after`)
+  const [myText, setMyText] = useState(`before ...  [insert:65y67y re] ...after`)
+
+
 
   const handleEditorDidMount = (editor: any, monaco: any): void => {
-    editorRef.current = editor; 
+    // editorRef.current = editor; 
     
     monaco.languages.register({id:'myLang'});
     monaco.languages.setMonarchTokensProvider('myLang',{
       tokenizer: {
           root: [
-              // [/\[insert: \]/, "myObj"]
               [/\[insert.*\]/, "myObj"]
           ]
       }
@@ -25,7 +26,6 @@ export const MyMonaco: FC = (): any => {
       base: 'vs',
       inherit: true,
       rules: [
-            // { background: 'EDF9FA' },
             { token: 'myObj', foreground: '#ff0000' }
             ],
       colors: {
@@ -41,13 +41,16 @@ export const MyMonaco: FC = (): any => {
   }
 
   return (
-        <Editor
+    <>
+      <Editor
             height= "10vh"
             defaultLanguage= "myLang"
             theme= 'myTheme'
             value= {myText}
             onMount= { handleEditorDidMount }
             onChange= { handleEditorChange }
-        />
+      />
+      <div>{ myText }</div>
+    </>
       );
   }
