@@ -1,25 +1,22 @@
-import React, {FC, useEffect, useRef} from "react";
+import React, {FC, useRef, useState} from "react";
 
-import Editor, { useMonaco } from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
 
 import './myMonaco.css';
 
 export const MyMonaco: FC = (): any => {
   const editorRef = useRef<any>(null);
-  // const monaco = useMonaco();
 
-  //   function getCode(){
-  //   return ` a few words ... ssss myObj ...ababab`;
-  // }
-  const abc = ` a few words ... ssss myObj ...ababab`;
+  const [myText, setMyText] = useState(`before ...  [insert: ] ...after`)
 
-const handleEditorDidMount = (editor: any, monaco: any): void => {
+  const handleEditorDidMount = (editor: any, monaco: any): void => {
+    editorRef.current = editor; 
     
-    monaco.languages.register({id:'myLang'})
+    monaco.languages.register({id:'myLang'});
     monaco.languages.setMonarchTokensProvider('myLang',{
       tokenizer: {
           root: [
-              [/myObj/,"myObj"]
+              [/\[insert: \]/, "myObj"]
           ]
       }
     })
@@ -27,49 +24,29 @@ const handleEditorDidMount = (editor: any, monaco: any): void => {
       base: 'vs',
       inherit: true,
       rules: [
-            { background: 'EDF9FA' },
-            { token: 'myObj', foreground: '#3d34eb' }
+            // { background: 'EDF9FA' },
+            { token: 'myObj', foreground: '#ff0000' }
             ],
       colors: {
-        'editor.foreground': '#c0eb34',
+        'editor.foreground': '#080706',
       }
     });
     monaco.editor.setTheme('myTheme');
-    // monaco.editor.create(document.getElementById('container'), {
-    //   value: abc,
-    //   language: 'myLang',
-    //   fontFamily: 'Arial',
-    //   fontSize: 20,
-    //   theme: 'myTheme'
-    // });
-    
-    editorRef.current = editor; 
   }
   
-  const showValue = (): any => {
-    editorRef?.current && console.log(editorRef.current.getValue());
-  }
-
-  const handleEditorChange = (value: any, event: any): void => {
+  const handleEditorChange = (value: any ): void => {
     console.log("current value:", value);
-    console.log("current event: ", event.changes[0].text);
+    setMyText(value)
   }
-
 
   return (
-        <div id='container'>
-        
-      <Editor
-          height="10vh"
-          defaultLanguage="myLang"
-          // defaultValue={abc}
-          theme= 'myTheme'
-          value={abc}
-          onMount={ handleEditorDidMount }
-          onChange={ handleEditorChange }
-      />
-        </div>
-        );
-}
-
-// export default MyMonaco;
+        <Editor
+            height= "10vh"
+            defaultLanguage= "myLang"
+            theme= 'myTheme'
+            value= {myText}
+            onMount= { handleEditorDidMount }
+            onChange= { handleEditorChange }
+        />
+      );
+  }
