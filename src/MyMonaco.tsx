@@ -16,7 +16,8 @@ export const MyMonaco: FC = (): any => {
     monaco.languages.setMonarchTokensProvider('myLang',{
       tokenizer: {
           root: [
-              [/\[insert: \]/, "myObj"]
+              // [/\[insert: \]/, "myObj"]
+              [/\[insert.*\]/, "myObj"]
           ]
       }
     })
