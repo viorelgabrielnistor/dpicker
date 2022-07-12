@@ -1,27 +1,26 @@
-import React, {FC, useRef, useState} from "react";
+import React, {FC, useEffect, useRef, useState} from "react";
 
-import Editor from "@monaco-editor/react";
+import Editor, { useMonaco } from "@monaco-editor/react";
 
 import './myMonaco.css';
 
 export const MyMonaco: FC = (): any => {
   // const editorRef = useRef<any>(null);
 
-  const [myText, setMyText] = useState(`before ...  [insert:65y67y re] ...after`)
-
-
+  const [myText, setMyText] = useState(`before ...  [insert:   ] ...after`);
 
   const handleEditorDidMount = (editor: any, monaco: any): void => {
-    // editorRef.current = editor; 
+    // editorRef.current = editor;
     
     monaco.languages.register({id:'myLang'});
-    monaco.languages.setMonarchTokensProvider('myLang',{
+    monaco.languages.setMonarchTokensProvider('myLang', {
       tokenizer: {
-          root: [
-              [/\[insert.*\]/, "myObj"]
-          ]
+        root: [
+          [/\[insert.*\]/, "myObj"]
+        ]
       }
-    })
+    });
+
     monaco.editor.defineTheme('myTheme', {
       base: 'vs',
       inherit: true,
@@ -41,16 +40,15 @@ export const MyMonaco: FC = (): any => {
   }
 
   return (
-    <>
+    <div style={ { border: '1px solid brown', height: '100px', width: '1000px', margin: '10px auto' } }>
       <Editor
-            height= "10vh"
-            defaultLanguage= "myLang"
-            theme= 'myTheme'
-            value= {myText}
-            onMount= { handleEditorDidMount }
-            onChange= { handleEditorChange }
+        height= "10vh"
+        defaultLanguage= "myLang"
+        theme= 'myTheme'
+        value= {myText}
+        onMount= { handleEditorDidMount }
+        onChange= { handleEditorChange }
       />
-      <div>{ myText }</div>
-    </>
-      );
+    </div>
+    );
   }
